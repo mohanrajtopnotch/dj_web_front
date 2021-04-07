@@ -1,8 +1,11 @@
+import React from 'react';
+import Router from "./Router";
+import { Switch } from 'react-router-dom';
 function App() {
   return (
-    <h1>
-      Hai
-    </h1>
+    <Switch>
+      <Router/>
+    </Switch>
   );
 }
 
