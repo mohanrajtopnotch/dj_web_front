@@ -57,7 +57,7 @@ export default function AdminScreen() {
               id="outlined-multiline-static"
               label="Descriptions"
               multiline 
-              rows={4}
+              rows={7}
               defaultValue="Product Details"
               variant="outlined"
               style={{width:'400px'}}
@@ -114,7 +114,7 @@ export default function AdminScreen() {
                     </button>
                 </CardActions>
         </Paper>
-        ))}
+        ))} 
       </Grid>
     </div>
   );
