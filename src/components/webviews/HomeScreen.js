@@ -52,11 +52,12 @@ export default function HomeScreen() {
       style={{ padding: "10px", margin: "10px", backgroundColor: "#ef5446" }}
     >
       <Grid container direction="row" justify="center" alignItems="center">
-        {listService.map((item) => (
+        {listService.map((item,index) => (
           
           <Paper
             style={{ width: "1000px", height: "420px", margin: "10px" }}
             elevation={3}
+            key={index}
           >
             <CardHeader
               avatar={

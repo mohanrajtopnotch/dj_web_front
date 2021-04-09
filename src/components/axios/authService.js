@@ -2,11 +2,8 @@ import axios from 'axios';
 import {API_URL} from '../constants';
 
 export const registerUser = async (req,res) => {
-  let data = {
-      username:req.body.username,
-      email:req.body.email,
-      password:req.body.password
-  }
+
+  let data = req;
   try {
     const response = await axios.post(`${API_URL}/dj/register`, data, {
       withCredentials: true,
@@ -20,11 +17,7 @@ export const registerUser = async (req,res) => {
 };
 
 export const loginUser= async (req,res) => {
-  let data = {
-        username:req.body.username,
-        email:req.body.email,
-        password:req.body.password
-  }
+  let data = req
   try {
     const response = await axios.post(
       `${API_URL}/dj/login`,data,
@@ -32,9 +25,12 @@ export const loginUser= async (req,res) => {
         withCredentials: true,
       },
     );
+    alert(response)
     console.log(response.data);
+    localStorage.setItem(response.data)
     return response.data;
   } catch (err) {
+    alert(err);
     console.log(err);
     return err;
   }

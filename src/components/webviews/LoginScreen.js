@@ -1,4 +1,4 @@
-import React , {useState , useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -7,6 +7,9 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+// import axios from "axios";
+// import { API_URL } from "../constants";
+import { loginUser } from "../axios/authService"
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(12),
@@ -28,11 +31,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 export default function LoginScreen() {
-
   const classes = useStyles();
   const [username, setUsername] = useState(" ");
   const [email, setEmail] = useState(" ");
   const [password, setPassword] = useState(" ");
+  const LoginAxiosCall = async(e) => {
+      let map={
+        username,
+        email,
+        password
+      }
+      await loginUser(map).then((data)=>{
+        localStorage.setItem(data)
+        alert("Loggin Succesfull"+data)
+      }).catch((err)=>{
+        alert("Login Failed"+err)
+      })
+  };
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -91,6 +106,9 @@ export default function LoginScreen() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={(e)=>{
+              LoginAxiosCall(e)
+            }}
           >
             Sign In
           </Button>
@@ -104,4 +122,5 @@ export default function LoginScreen() {
         </form>
       </div>
     </Container>
-)}
+  );
+}

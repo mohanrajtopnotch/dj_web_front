@@ -8,6 +8,8 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
+import { registerUser} from '../axios/authService'
+import { API_URL } from "../constants";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(12),
@@ -33,6 +35,21 @@ export default function SignUpScreen() {
   const [email, setEmail] = useState(" ");
   const [password, setPassword] = useState(" ");
   const classes = useStyles();
+  const SignupAxiosCall = async(e) => {
+    try{
+      alert("Account Created Succesfully")
+      let map={
+        username,
+        email,
+        password
+      }
+      let data =await registerUser(map)
+      alert("Account Created Succesfully"+data)
+    }
+    catch(err){
+      alert("Account Not Created"+err)
+    }
+  };
   return (
     <Container className={classes.main} component="main" maxWidth="xs">
       <CssBaseline />
@@ -91,6 +108,9 @@ export default function SignUpScreen() {
             variant="contained"
             color={"primary"}
             className={classes.submit}
+            onClick={(e) => {
+              SignupAxiosCall(e);
+            }}
           >
             Sign Up
           </Button>

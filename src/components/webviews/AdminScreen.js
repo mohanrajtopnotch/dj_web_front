@@ -1,8 +1,9 @@
-import React from "react";
+import React , {useState , useEffect} from "react";
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import { Input } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
+import { createProduct , readProduct } from "../axios/productService"
 import {
   Paper,
   CardHeader,
@@ -28,7 +29,21 @@ const useStyles = makeStyles((theme) => ({
   }));
 export default function AdminScreen() {
   const [list, setList] = React.useState([]);
+  const [title, setTitle] = useState('');
+  const [descriptions, setDescriptions] = useState('');
+  const [file,setFile]=useState();
   const classes = useStyles();
+
+  const [listService ,setListService ] = useState([])
+  
+  useEffect(() => {
+    let getProduct = async () => {
+      const {result} = await readProduct();
+      console.log(result)
+      setListService(result);
+    };
+    getProduct()
+  }, []);
   return (
     <div
       style={{ padding: "10px", margin: "10px", backgroundColor: "#ef5446"  }}
@@ -40,16 +55,17 @@ export default function AdminScreen() {
         >   
         <h3 style={{textAlign:'center'}}>Upload Product Image Here !!</h3>
           <Grid container direction="row" justify="center" alignItems="center" style={{padding:'20px'}}>
-            <Input type="file" />
+            <Input type="file" value={file} onChange={(e)=>{setFile(e.target.value)}}/>
           </Grid>
           <Grid container direction="row" justify="center" alignItems="center" style={{padding:'20px'}}>
             <TextField
               id="outlined-multiline-static"
               label="Title" 
               rows={1}
-              defaultValue="Product Title"
               variant="outlined"
               style={{width:'400px'}}
+              value={title}
+              onChange={(e)=>{setTitle(e.target.value)}}
             />
           </Grid>
           <Grid container direction="row" justify="center" alignItems="center" style={{padding:'20px'}}>
@@ -58,9 +74,10 @@ export default function AdminScreen() {
               label="Descriptions"
               multiline 
               rows={7}
-              defaultValue="Product Details"
               variant="outlined"
               style={{width:'400px'}}
+              value={descriptions}
+              onChange={(e)=>{setDescriptions(e.target.value)}}
             />
           </Grid>
           <Grid container direction="row" justify="center" alignItems="center" style={{padding:'20px'}} >
@@ -77,7 +94,7 @@ export default function AdminScreen() {
       </Grid>
       <h1 style={{textAlign:'center',color:'white'}}>Added Items Display Below</h1>
       <Grid container direction="row" justify="center" alignItems="center">
-        {list.map((item) => (
+        {listService.map((item) => (
           <Paper
           style={{ width: "1000px", height: "420px", margin: "10px" }}
           elevation={3}
@@ -89,16 +106,16 @@ export default function AdminScreen() {
               </Avatar>
             }
             title={list.title}
-            subheader="September 14, 2016"
+            subheader={item.update_at}
           />
           <CardMedia
             className={classes.media}
-            image={item.imgUrl}
+            image={item.productImage.split('/')[0]}
             title="Product"
           />
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
-              {item.description}
+              {item.descriptions}
             </Typography>
           </CardContent>
           <CardActions disableSpacing style={{height:'20px'}}>
@@ -109,7 +126,9 @@ export default function AdminScreen() {
                         variant="outlined"
                         style={{width:'500px'}}
                     />
-                    <button style={{ color:'black',marginLeft:'10px',height:'50px',width:'70px',backgroundColor:'white',border:'1px solid grey'}}>
+                    <button onClick={()=>{
+                      createProduct({title,descriptions,file})
+                    }} style={{ color:'black',marginLeft:'10px',height:'50px',width:'70px',backgroundColor:'white',border:'1px solid grey'}}>
                         send
                     </button>
                 </CardActions>
