@@ -34,6 +34,7 @@ export default function HomeScreen() {
   const classes = useStyles();
   const [value, setValue] = useState(2);
   const [hover, setHover] = useState(-1);
+  
   const [listService ,setListService ] = useState([])
   
   useEffect(() => {
@@ -44,7 +45,6 @@ export default function HomeScreen() {
     };
     getProduct()
   }, []);
-  
   return (
     <>
     <Header/>
@@ -71,7 +71,7 @@ export default function HomeScreen() {
             <div>{item.productImage.split('/')[0]}</div>
             <CardMedia
               className={classes.media}
-              image={`${API_URL}+${item.productImage.split('/')[1]}`}
+              image={`${API_URL}+${item.productImage.split('//')[1]}`}
               title="Product"
             />
             <CardContent>

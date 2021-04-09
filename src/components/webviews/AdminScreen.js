@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import { Input } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import { createProduct , readProduct } from "../axios/productService"
+import {API_URL} from '../constants'
 import {
   Paper,
   CardHeader,
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 export default function AdminScreen() {
-  const [list, setList] = React.useState([]);
+ 
   const [title, setTitle] = useState('');
   const [descriptions, setDescriptions] = useState('');
   const [file,setFile]=useState();
@@ -36,6 +37,22 @@ export default function AdminScreen() {
 
   const [listService ,setListService ] = useState([])
   
+  const CreateProductAxiosCall = async(e) => {
+    try{
+      alert("Account Created Succesfully")
+      let map={
+        title,
+        descriptions,
+        file
+      }
+      let data =await createProduct(map)
+      alert("Product Created Succesfully"+data)
+    }
+    catch(err){
+      alert("Product Not Created"+err)
+    }
+  };
+  //Product Add Fetching From Backend
   useEffect(() => {
     let getProduct = async () => {
       const {result} = await readProduct();
@@ -82,10 +99,10 @@ export default function AdminScreen() {
           </Grid>
           <Grid container direction="row" justify="center" alignItems="center" style={{padding:'20px'}} >
             <button
-              onClick={() => {
-                let ele = "Mohan";
-                setList([...list, ele]);
+              onClick={(e)=>{
+                CreateProductAxiosCall(e)
               }}
+              //Need to Implement send data to backend
             >
               Click to Add Product{" "}
             </button>
@@ -93,8 +110,11 @@ export default function AdminScreen() {
         </Paper>
       </Grid>
       <h1 style={{textAlign:'center',color:'white'}}>Added Items Display Below</h1>
+     
+     
       <Grid container direction="row" justify="center" alignItems="center">
         {listService.map((item) => (
+          //Need to Iterate the data from server
           <Paper
           style={{ width: "1000px", height: "420px", margin: "10px" }}
           elevation={3}
@@ -105,12 +125,12 @@ export default function AdminScreen() {
                 A
               </Avatar>
             }
-            title={list.title}
+            title={item.title}
             subheader={item.update_at}
           />
           <CardMedia
             className={classes.media}
-            image={item.productImage.split('/')[0]}
+            image={`${API_URL}+${item.productImage.split('//')[1]}`}
             title="Product"
           />
           <CardContent>
@@ -126,9 +146,7 @@ export default function AdminScreen() {
                         variant="outlined"
                         style={{width:'500px'}}
                     />
-                    <button onClick={()=>{
-                      createProduct({title,descriptions,file})
-                    }} style={{ color:'black',marginLeft:'10px',height:'50px',width:'70px',backgroundColor:'white',border:'1px solid grey'}}>
+                    <button  style={{ color:'black',marginLeft:'10px',height:'50px',width:'70px',backgroundColor:'white',border:'1px solid grey'}}>
                         send
                     </button>
                 </CardActions>
